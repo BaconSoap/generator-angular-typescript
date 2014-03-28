@@ -1,3 +1,6 @@
 ///<reference path="references.ts" />
 
-var a = 'apple'; // a is for apple
+module myApp {
+	var app = angular.module('packageNameApp', []);
+	export var a = 'apple';
+}

@@ -1,3 +1,5 @@
 /// <reference path="../def/jquery.d.ts" />
 /// <reference path="../def/angular.d.ts" />
-declare var a: string;
+declare module myApp {
+    var a: string;
+}

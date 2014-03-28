@@ -1,5 +1,6 @@
 describe('this app', function () {
+    beforeEach(module('packageNameApp'));
     it('works', function () {
-        expect(a).to.equal('apple');
+        expect(myApp.a).to.equal('apple');
     });
 });

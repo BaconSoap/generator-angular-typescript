@@ -1,7 +1,8 @@
 ///<reference path="../testReferences.ts" />
 
 describe('this app', () => {
+	beforeEach(module('packageNameApp'));
 	it('works', () => {
-		expect(a).to.equal('apple');
+		expect(myApp.a).to.equal('apple');
 	});
 });

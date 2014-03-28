@@ -1,4 +1,8 @@
-var a = 'apple';
+var myApp;
+(function (myApp) {
+    var app = angular.module('packageNameApp', []);
+    myApp.a = 'apple';
+})(myApp || (myApp = {}));
 ;angular.module('templates-main', ['templates/index.tpl.html']);
 
 angular.module("templates/index.tpl.html", []).run(["$templateCache", function($templateCache) {
