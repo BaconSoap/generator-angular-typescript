@@ -62,10 +62,10 @@ module.exports = function(grunt) {
     },
     html2js: {
       options: {
-        base: 'src'  
+        base: ''  
       },
       main: {
-        src: ['src/templates/**/*.tpl.html'],
+        src: ['templates/**/*.tpl.html'],
         dest: 'build/templates.js'
       },
     },
