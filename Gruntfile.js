@@ -48,6 +48,10 @@ module.exports = function(grunt) {
       tests: {
         files: ['test/unit/**/*.ts'],
         tasks: ['typescript:tests','karma:unit:run']
+      },
+      styles: {
+        files: ['styles/**/*.scss'],
+        tasks: ['sass']
       }
     },
     karma: {
@@ -77,6 +81,13 @@ module.exports = function(grunt) {
         src: ['<%= typescript.base.dest %>', '<%= html2js.main.dest %>'],
         dest: 'build/<%= pkg.name %>.js'
       }
+    },
+    sass: {
+      dist: {
+        files: {
+          "styles/main.css": "styles/main.scss"
+        }
+      }
     }
 
   });
@@ -84,7 +95,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('base', ['tslint', 'clean', 'mkdir', 'typescript', 'html2js', 'concat', 'uglify']);
-  grunt.registerTask('default', ['base', 'karma:now']);
+  grunt.registerTask('default', ['base', 'karma:now', 'sass']);
   grunt.registerTask('w', ['karma:unit', 'watch']);
   grunt.registerTask('wt', ['karma:unit', 'watch:tests']);
 };
