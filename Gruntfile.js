@@ -1,4 +1,9 @@
 module.exports = function(grunt) {
+
+  grunt.registerTask('showInfo', function() {
+    grunt.log.writeln('go to http://localhost:1337/ after running `bower install`');
+  });
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     srcFileGlob: "src/**/*.ts",
@@ -88,6 +93,13 @@ module.exports = function(grunt) {
           "styles/main.css": "styles/main.scss"
         }
       }
+    },
+    connect: {
+      server: {
+        options: {
+          port: 1337
+        }
+      }
     }
 
   });
@@ -97,5 +109,5 @@ module.exports = function(grunt) {
   grunt.registerTask('base', ['tslint', 'clean', 'mkdir', 'typescript', 'html2js', 'concat', 'uglify']);
   grunt.registerTask('default', ['base', 'karma:now', 'sass']);
   grunt.renameTask('watch', 'watchStart');
-  grunt.registerTask('watch', ['karma:unit', 'watchStart']);
+  grunt.registerTask('watch', ['connect', 'showInfo', 'karma:unit', 'watchStart']);
 };
