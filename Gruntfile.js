@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    watch: {
+    watchStart: {
       src: {
         files: ['<%= srcFileGlob %>', 'src/**/*.tpl.html'],
         tasks: ['base', 'karma:unit:run']
@@ -96,6 +96,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('base', ['tslint', 'clean', 'mkdir', 'typescript', 'html2js', 'concat', 'uglify']);
   grunt.registerTask('default', ['base', 'karma:now', 'sass']);
-  grunt.registerTask('w', ['karma:unit', 'watch']);
-  grunt.registerTask('wt', ['karma:unit', 'watch:tests']);
+  grunt.renameTask('watch', 'watchStart');
+  grunt.registerTask('watch', ['karma:unit', 'watch']);
 };
