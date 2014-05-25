@@ -47,7 +47,7 @@ module.exports = function(grunt) {
     },
     watchStart: {
       src: {
-        files: ['<%= srcFileGlob %>', 'src/**/*.tpl.html'],
+        files: ['<%= srcFileGlob %>', 'templates/**/*.tpl.html'],
         tasks: ['base', 'karma:unit:run']
       },
       tests: {
