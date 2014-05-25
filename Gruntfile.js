@@ -97,5 +97,5 @@ module.exports = function(grunt) {
   grunt.registerTask('base', ['tslint', 'clean', 'mkdir', 'typescript', 'html2js', 'concat', 'uglify']);
   grunt.registerTask('default', ['base', 'karma:now', 'sass']);
   grunt.renameTask('watch', 'watchStart');
-  grunt.registerTask('watch', ['karma:unit', 'watch']);
+  grunt.registerTask('watch', ['karma:unit', 'watchStart']);
 };
