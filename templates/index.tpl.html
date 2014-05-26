@@ -1,4 +1,14 @@
-<div ui-view></div>
+<div class="container-fluid">
 
-<a ui-sref="state1">View Fruit State</a>
-<a ui-sref="state2">Add Fruit State</a>
+	<div class="row">
+		<div class="col-md-2">
+			<ul class="nav">
+				<li><a ui-sref="state1">View Fruit State</a></li>
+				<li><a ui-sref="state2">Add Fruit State</a></li>
+				<li><a ui-sref="formShipping">Start billing</a></li>
+			</ul>
+		</div>
+		<div ui-view class="col-md-10"></div>
+	</div>
+
+</div>

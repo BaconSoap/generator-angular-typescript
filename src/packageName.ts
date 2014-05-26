@@ -1,7 +1,7 @@
 ///<reference path="references.ts" />
 
 module myApp {
-	var app = angular.module('packageNameApp', ['ui.router', 'templates-main']);
+	var app = angular.module('packageNameApp', ['ui.router', 'templates-main', 'multiForms']);
 	app.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) => {
 		$urlRouterProvider.otherwise('/state1');
 		$stateProvider
@@ -13,6 +13,18 @@ module myApp {
 				url: '/state2',
 				templateUrl: 'templates/state2.tpl.html',
 				controller: 'state2Ctrl'
+			}).state('formShipping', {
+				url: '/shipping',
+				templateUrl: 'templates/form-1.tpl.html',
+				controller: 'formShippingCtrl'
+			}).state('formBilling', {
+				url: '/billing',
+				templateUrl: 'templates/form-2.tpl.html',
+				controller: 'formBillingCtrl'
+			}).state('formConfirm', {
+				url: '/confirm',
+				templateUrl: 'templates/formConfirm.tpl.html',
+				controller: 'formConfirmCtrl'
 			});
 	}]);
 
@@ -45,6 +57,7 @@ module myApp {
 	}]);
 
 	export var a = 'apple';
+
 
 	//our model class
 	class Fruit {

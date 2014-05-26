@@ -1,6 +1,70 @@
+var forms;
+(function (forms) {
+    var app = angular.module('multiForms', []);
+
+    app.controller('formShippingCtrl', [
+        'checkoutService', '$scope', function (checkoutService, $scope) {
+            $scope.model = checkoutService.checkoutModel.shipping;
+            $scope.validate = function () {
+                return $scope.shippingForm.$valid;
+            };
+        }]);
+
+    app.controller('formBillingCtrl', [
+        'checkoutService', '$scope', function (checkoutService, $scope) {
+            $scope.model = checkoutService.checkoutModel.billing;
+        }]);
+
+    app.controller('formConfirmCtrl', [
+        'checkoutService', '$scope', function (checkoutService, $scope) {
+            $scope.model = checkoutService.checkoutModel;
+        }]);
+
+    app.factory('checkoutService', [function () {
+            var shippingInfo = { name: '', address: '' };
+            var billingInfo = { zip: '00000', cardType: 'visa' };
+
+            var checkoutModel = {
+                shipping: shippingInfo,
+                billing: billingInfo
+            };
+
+            var service = {
+                checkoutModel: checkoutModel
+            };
+
+            return service;
+        }]);
+
+    app.directive('validateRoute', [
+        '$rootScope', function ($rootScope) {
+            return {
+                restrict: 'A',
+                link: function (scope, el, attr) {
+                    var validateFn;
+
+                    attr.$observe('validateRoute', function (val) {
+                        validateFn = scope.$eval(attr.validateRoute);
+                    });
+
+                    var stateChangeStart = function (e, toState, toParams, fromState) {
+                        if (validateFn && !validateFn()) {
+                            e.preventDefault();
+                        }
+                    };
+
+                    var $removeEventListener = $rootScope.$on('$stateChangeStart', stateChangeStart);
+
+                    scope.$on('$destroy', function () {
+                        $removeEventListener();
+                    });
+                }
+            };
+        }]);
+})(forms || (forms = {}));
 var myApp;
 (function (myApp) {
-    var app = angular.module('packageNameApp', ['ui.router', 'templates-main']);
+    var app = angular.module('packageNameApp', ['ui.router', 'templates-main', 'multiForms']);
     app.config([
         '$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
             $urlRouterProvider.otherwise('/state1');
@@ -12,6 +76,18 @@ var myApp;
                 url: '/state2',
                 templateUrl: 'templates/state2.tpl.html',
                 controller: 'state2Ctrl'
+            }).state('formShipping', {
+                url: '/shipping',
+                templateUrl: 'templates/form-1.tpl.html',
+                controller: 'formShippingCtrl'
+            }).state('formBilling', {
+                url: '/billing',
+                templateUrl: 'templates/form-2.tpl.html',
+                controller: 'formBillingCtrl'
+            }).state('formConfirm', {
+                url: '/confirm',
+                templateUrl: 'templates/formConfirm.tpl.html',
+                controller: 'formConfirmCtrl'
             });
         }]);
 
