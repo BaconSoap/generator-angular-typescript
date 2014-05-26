@@ -21,7 +21,7 @@ angular.module("templates/form-2.tpl.html", []).run(["$templateCache", function(
   $templateCache.put("templates/form-2.tpl.html",
     "<div ng-include=\"'templates/formNav.tpl.html'\"></div>\n" +
     "\n" +
-    "<ng-form validate-route=\"validate\" name=\"billingForm\">\n" +
+    "<ng-form validate-route=\"billingForm\" name=\"billingForm\">\n" +
     "	<div class=\"form-group\" ng-class=\"{'has-error': billingForm.zipCode.$invalid, 'has-success': billingForm.zipCode.$valid}\">\n" +
     "		<label class=\"control-label\" for=\"zipCode\">Zip Code</label>\n" +
     "		<input type=\"text\" class=\"form-control\" name=\"zipCode\" id=\"zipCode\" ng-pattern=\"/^[0-9]{5}$/\" required ng-model=\"model.zip\">\n" +

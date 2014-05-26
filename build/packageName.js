@@ -13,9 +13,6 @@ var forms;
     app.controller('formBillingCtrl', [
         'checkoutService', '$scope', function (checkoutService, $scope) {
             $scope.model = checkoutService.checkoutModel.billing;
-            $scope.validate = function () {
-                return $scope.billingForm.$valid;
-            };
         }]);
 
     app.controller('formConfirmCtrl', [
@@ -45,18 +42,26 @@ var forms;
                 restrict: 'A',
                 link: function (scope, el, attr) {
                     var validateFn;
+                    var validateForm;
 
                     attr.$observe('validateRoute', function (val) {
-                        validateFn = scope.$eval(attr.validateRoute);
+                        var realVal = scope.$eval(attr.validateRoute);
+                        if (realVal && typeof realVal.$valid !== 'undefined') {
+                            validateForm = realVal;
+                        } else if (realVal && typeof realVal === 'function') {
+                            validateFn = realVal;
+                        }
                     });
 
-                    var stateChangeStart = function (e, toState, toParams, fromState) {
+                    var validateStateChange = function (e, toState, toParams, fromState) {
                         if (validateFn && !validateFn()) {
+                            e.preventDefault();
+                        } else if (validateForm && !validateForm.$valid) {
                             e.preventDefault();
                         }
                     };
 
-                    var $removeEventListener = $rootScope.$on('$stateChangeStart', stateChangeStart);
+                    var $removeEventListener = $rootScope.$on('$stateChangeStart', validateStateChange);
 
                     scope.$on('$destroy', function () {
                         $removeEventListener();
@@ -154,7 +159,7 @@ angular.module("templates/form-2.tpl.html", []).run(["$templateCache", function(
   $templateCache.put("templates/form-2.tpl.html",
     "<div ng-include=\"'templates/formNav.tpl.html'\"></div>\n" +
     "\n" +
-    "<ng-form validate-route=\"validate\" name=\"billingForm\">\n" +
+    "<ng-form validate-route=\"billingForm\" name=\"billingForm\">\n" +
     "	<div class=\"form-group\" ng-class=\"{'has-error': billingForm.zipCode.$invalid, 'has-success': billingForm.zipCode.$valid}\">\n" +
     "		<label class=\"control-label\" for=\"zipCode\">Zip Code</label>\n" +
     "		<input type=\"text\" class=\"form-control\" name=\"zipCode\" id=\"zipCode\" ng-pattern=\"/^[0-9]{5}$/\" required ng-model=\"model.zip\">\n" +

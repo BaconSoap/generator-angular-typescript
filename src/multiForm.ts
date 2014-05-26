@@ -10,9 +10,6 @@ module forms {
 
 	app.controller('formBillingCtrl', ['checkoutService', '$scope', (checkoutService, $scope) => {
 		$scope.model = checkoutService.checkoutModel.billing;
-		$scope.validate = () => {
-			return $scope.billingForm.$valid;
-		};
 	}]);
 
 	app.controller('formConfirmCtrl', ['checkoutService', '$scope', (checkoutService, $scope) => {
@@ -35,25 +32,40 @@ module forms {
 		return service;
 	}]);
 
+	/**
+	 * A directive to validate the current route's state before attempting to switch state.
+	 * Provides a shortcut for the case of the current route being represented by a form.
+	 * @param {[type]}	'validateRoute' If a function, the function should return true
+	 *                                   if the state is valid and can be changed.
+	 *                                   If a form, the state is valid if form.$valid is true.
+	 */
 	app.directive('validateRoute', ['$rootScope', ($rootScope) => {
 		return {
 			restrict: 'A',
 			link: (scope, el, attr) => {
 				var validateFn;
+				var validateForm;
 
-				//grab the validation function
+				//grab either the validation function or the form to validate
 				attr.$observe('validateRoute', val => {
-					validateFn = scope.$eval(attr.validateRoute);
+					var realVal = scope.$eval(attr.validateRoute);
+					if (realVal && typeof realVal.$valid !== 'undefined') {
+						validateForm = realVal;
+					} else if (realVal && typeof realVal === 'function') {
+						validateFn = realVal;
+					}
 				});
 
-				var stateChangeStart = (e, toState, toParams, fromState) => {
-					//if the validation function returns false then cancel state switching
+				var validateStateChange = (e, toState, toParams, fromState) => {
+					//check the validation function or the form
 					if (validateFn && !validateFn()) {
+						e.preventDefault();
+					} else if (validateForm && !validateForm.$valid) {
 						e.preventDefault();
 					}
 				};
 
-				var $removeEventListener = $rootScope.$on('$stateChangeStart', stateChangeStart);
+				var $removeEventListener = $rootScope.$on('$stateChangeStart', validateStateChange);
 
 				//clean up events when the directive is cleaned up
 				scope.$on('$destroy', () => {

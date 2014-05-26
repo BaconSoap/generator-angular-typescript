@@ -13,9 +13,6 @@ var forms;
     app.controller('formBillingCtrl', [
         'checkoutService', '$scope', function (checkoutService, $scope) {
             $scope.model = checkoutService.checkoutModel.billing;
-            $scope.validate = function () {
-                return $scope.billingForm.$valid;
-            };
         }]);
 
     app.controller('formConfirmCtrl', [
@@ -45,18 +42,26 @@ var forms;
                 restrict: 'A',
                 link: function (scope, el, attr) {
                     var validateFn;
+                    var validateForm;
 
                     attr.$observe('validateRoute', function (val) {
-                        validateFn = scope.$eval(attr.validateRoute);
+                        var realVal = scope.$eval(attr.validateRoute);
+                        if (realVal && typeof realVal.$valid !== 'undefined') {
+                            validateForm = realVal;
+                        } else if (realVal && typeof realVal === 'function') {
+                            validateFn = realVal;
+                        }
                     });
 
-                    var stateChangeStart = function (e, toState, toParams, fromState) {
+                    var validateStateChange = function (e, toState, toParams, fromState) {
                         if (validateFn && !validateFn()) {
+                            e.preventDefault();
+                        } else if (validateForm && !validateForm.$valid) {
                             e.preventDefault();
                         }
                     };
 
-                    var $removeEventListener = $rootScope.$on('$stateChangeStart', stateChangeStart);
+                    var $removeEventListener = $rootScope.$on('$stateChangeStart', validateStateChange);
 
                     scope.$on('$destroy', function () {
                         $removeEventListener();
