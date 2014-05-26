@@ -13,6 +13,9 @@ var forms;
     app.controller('formBillingCtrl', [
         'checkoutService', '$scope', function (checkoutService, $scope) {
             $scope.model = checkoutService.checkoutModel.billing;
+            $scope.validate = function () {
+                return $scope.billingForm.$valid;
+            };
         }]);
 
     app.controller('formConfirmCtrl', [
@@ -150,7 +153,18 @@ angular.module("templates/form-1.tpl.html", []).run(["$templateCache", function(
 angular.module("templates/form-2.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("templates/form-2.tpl.html",
     "<div ng-include=\"'templates/formNav.tpl.html'\"></div>\n" +
-    "");
+    "\n" +
+    "<ng-form validate-route=\"validate\" name=\"billingForm\">\n" +
+    "	<div class=\"form-group\" ng-class=\"{'has-error': billingForm.zipCode.$invalid, 'has-success': billingForm.zipCode.$valid}\">\n" +
+    "		<label class=\"control-label\" for=\"zipCode\">Zip Code</label>\n" +
+    "		<input type=\"text\" class=\"form-control\" name=\"zipCode\" id=\"zipCode\" ng-pattern=\"/^[0-9]{5}$/\" required ng-model=\"model.zip\">\n" +
+    "	</div>\n" +
+    "\n" +
+    "	<div class=\"form-group\" ng-class=\"{'has-error': billingForm.cardType.$invalid, 'has-success': billingForm.cardType.$valid}\">\n" +
+    "		<label class=\"control-label\" for=\"cardType\">Card Type</label>\n" +
+    "		<input type=\"text\" class=\"form-control\" name=\"cardType\" required id=\"cardType\" ng-model=\"model.cardType\">\n" +
+    "	</div>\n" +
+    "</ng-form>");
 }]);
 
 angular.module("templates/formConfirm.tpl.html", []).run(["$templateCache", function($templateCache) {

@@ -10,6 +10,9 @@ module forms {
 
 	app.controller('formBillingCtrl', ['checkoutService', '$scope', (checkoutService, $scope) => {
 		$scope.model = checkoutService.checkoutModel.billing;
+		$scope.validate = () => {
+			return $scope.billingForm.$valid;
+		};
 	}]);
 
 	app.controller('formConfirmCtrl', ['checkoutService', '$scope', (checkoutService, $scope) => {

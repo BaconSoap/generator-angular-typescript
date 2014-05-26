@@ -1,1 +1,13 @@
 <div ng-include="'templates/formNav.tpl.html'"></div>
+
+<ng-form validate-route="validate" name="billingForm">
+	<div class="form-group" ng-class="{'has-error': billingForm.zipCode.$invalid, 'has-success': billingForm.zipCode.$valid}">
+		<label class="control-label" for="zipCode">Zip Code</label>
+		<input type="text" class="form-control" name="zipCode" id="zipCode" ng-pattern="/^[0-9]{5}$/" required ng-model="model.zip">
+	</div>
+
+	<div class="form-group" ng-class="{'has-error': billingForm.cardType.$invalid, 'has-success': billingForm.cardType.$valid}">
+		<label class="control-label" for="cardType">Card Type</label>
+		<input type="text" class="form-control" name="cardType" required id="cardType" ng-model="model.cardType">
+	</div>
+</ng-form>

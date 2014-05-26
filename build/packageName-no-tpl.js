@@ -13,6 +13,9 @@ var forms;
     app.controller('formBillingCtrl', [
         'checkoutService', '$scope', function (checkoutService, $scope) {
             $scope.model = checkoutService.checkoutModel.billing;
+            $scope.validate = function () {
+                return $scope.billingForm.$valid;
+            };
         }]);
 
     app.controller('formConfirmCtrl', [
